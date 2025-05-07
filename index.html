@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Squid Game - Red Light, Green Light</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        #gameArea {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background-color: #87CEEB;
+            overflow: hidden;
+        }
+        #player {
+            position: absolute;
+            bottom: 10px;
+            left: 50px;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+        }
+        #message {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        #startButton {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Squid Game - Red Light, Green Light</h1>
+    <div id="message">Press Start to Play</div>
+    <button id="startButton">Start</button>
+    <div id="gameArea">
+        <div id="player"></div>
+    </div>
+
+    <script>
+        const player = document.getElementById('player');
+        const message = document.getElementById('message');
+        const startButton = document.getElementById('startButton');
+        const gameArea = document.getElementById('gameArea');
+
+        let isGreenLight = false;
+        let gameInterval;
+        let playerPosition = 50;
+
+        function startGame() {
+            message.textContent = 'Green Light!';
+            isGreenLight = true;
+            playerPosition = 50;
+            player.style.left = playerPosition + 'px';
+            startButton.disabled = true;
+
+            gameInterval = setInterval(() => {
+                if (Math.random() > 0.5) {
+                    isGreenLight = true;
+                    message.textContent = 'Green Light!';
+                } else {
+                    isGreenLight = false;
+                    message.textContent = 'Red Light!';
+                }
+            }, 2000);
+        }
+
+        function movePlayer(event) {
+            if (isGreenLight && event.key === 'ArrowRight') {
+                playerPosition += 10;
+                player.style.left = playerPosition + 'px';
+
+                if (playerPosition >= gameArea.offsetWidth - 60) {
+                    message.textContent = 'ok!!!!!!!!!!!!';
+                    clearInterval(gameInterval);
+                    startButton.disabled = false;
+                }
+            } else if (!isGreenLight && event.key === 'ArrowRight') {
+                message.textContent = 'DIE!!!!!!!';
+                clearInterval(gameInterval);
+                startButton.disabled = false;
+            }
+        }
+
+        startButton.addEventListener('click', startGame);
+        document.addEventListener('keydown', movePlayer);
+    </script>
+</body>
+</html>
